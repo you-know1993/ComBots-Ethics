@@ -1,7 +1,7 @@
 # ComBots-Ethics
 Small Github for the stand-alone pronoun generation project
 
-Files:
+## Files:
 
 pseudo_code.py - Gives a general overview of the defined functions and their defined outputs
 

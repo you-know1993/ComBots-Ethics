@@ -1,10 +1,14 @@
 # imports
-
+import requests
+NAMEAPI_KEY="c5daf3adac2a3e85791630c643d55611-user1"
+url = ("http://api.nameapi.org/rest/v5.3/genderizer/persongenderizer?"
+    f"apiKey={NAMEAPI_KEY}"
+)
 
 def get_visual_gender(image_filepath):
     """
     Reads image
-    Load Tae's gender-age code.
+    Load Tae's gender-age code. https://github.com/leolani/cltl-face-all
     Extract gender & confidence.
     Translate gender and confidence to Male, Female, Unknown/Neutral (0,1,2)
     # Maybe we need a function to read the image file path to the format needed for Tae's module
@@ -17,9 +21,54 @@ def get_name_gender(name_string):
     """
     Use (harvard) api.
     Translate result to 0,1,2 for gender coding.
-    :param name_string: The name as a string (not sure about capitalisation)
+    :param name_string: The name as a string
     :return: 0,1,2 for male, female, unknown
     """
+    # Dict of data to be sent to the RESTapi of NameAPI.org:
+    payload = {
+        "context": {
+            "priority": "REALTIME",
+            "properties": []
+        },
+        "inputPerson": {
+            "type": "NaturalInputPerson",
+            "personName": {
+                "nameFields": [
+                    {
+                        "string": f"{name}",
+                        "fieldType": "GIVENNAME"
+                    }]
+            },
+            "gender": "UNKNOWN"
+        }
+    }
+    # Proceed, only if no error:
+    try:
+        # Send request to NameAPI.org by doing the following:
+        # - make a POST HTTP request
+        # - encode the Python payload dict to JSON
+        # - pass the JSON to request body
+        # - set header's 'Content-Type' to 'application/json' instead of
+        #   default 'multipart/form-data'
+        resp = requests.post(url, json=payload)
+        resp.raise_for_status()
+        # Decode JSON response into a Python dict:
+        resp_dict = resp.json()
+        name_gender = resp_dict['gender']
+        if name_gender == 'MALE':
+            name_gender_int = 1
+        elif name_gender == 'FEMALE':
+            name_gender_int = 2
+        elif name_gender == 'NEUTRAL':
+            name_gender_int= 3
+        elif name_gender == 'UNKNOWN':
+            name_gender_int = 3
+        return name_gender_int
+    except requests.exceptions.HTTPError as e:
+        print("Bad HTTP status code:", e)
+    except requests.exceptions.RequestException as e:
+        print("Network error:", e)
+
 
 def greeting_script():
     """

@@ -15,14 +15,15 @@ def check_gender_name(name):
 	Code from https://www.nameapi.org/index.php?id=215 & https://juliensalinas.com/en/REST_API_fetching_go_golang_vs_python/
 	Connects to the NAMEAPI to query the gender of a given name. 
 	It returns a dict with the gender of the name and the confidence in this gender.
-	Possible gender outcomes: FEMALE, MALE, UNKNOWN
+	Possible gender outcomes: FEMALE, MALE, NEUTRAL, UNKNOWN
+
 	Gender neutral names are mapped to unknown.
 	If the query errors, it will print an error message
 
 	param name: the first name of the person conversing with Leolanie
 	type name: string
 
-	returns: dict
+	returns: int (1 for male, 2 for female, 3 for unknown)
 
 	'''
 	# Dict of data to be sent to the RESTapi of NameAPI.org:

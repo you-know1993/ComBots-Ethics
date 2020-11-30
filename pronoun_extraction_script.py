@@ -148,12 +148,12 @@ def pronoun_retrieving_script(name_gender, visual_gender):
 
         print("I have been taught that there are different ways that humans like to be referred as.")
         if name_gender == 0:
-            suggested_pronous = "he/him"
-            pronouns = suggest_pronouns_script(suggested_pronous)
+            suggested_pronouns = "he/him"
+            pronouns = suggest_pronouns_script(suggested_pronouns)
 
         elif name_gender == 1:
-            suggested_pronous = "she/her"
-            pronouns = suggest_pronouns_script(suggested_pronous)
+            suggested_pronouns = "she/her"
+            pronouns = suggest_pronouns_script(suggested_pronouns)
 
     return pronouns
 

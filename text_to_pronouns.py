@@ -7,7 +7,7 @@ def extract_name_pronouns(text):
     """
     name_list = []
     pronoun_list = []
-    # List of first/second person pronouns to exclude  TODO: decide whether to exclude "it"
+    # List of first/second person pronouns to exclude
     exclude_pronoun_list = ["i", "we", "you", "it", "me", "us"]
 
     # Tokenise
@@ -15,6 +15,7 @@ def extract_name_pronouns(text):
 
     # Part of speech tag
     pos_tagged = nltk.pos_tag(text_tok)
+    #print(pos_tagged)
 
     # Loop through pos tagged list
     for token, pos_tag in pos_tagged:
@@ -35,10 +36,11 @@ sentence_2 = "My name is Soren. I prefer the pronouns he him."
 sentence_3 = "My name is Maria and my pronouns are I, they, them. How are you?"
 sentence_4 = "I'm Jack, I don't mind what you refer to me as, either he, him or they, them."
 sentence_5 = "No pronouns here"
-sentence_6 = "My name is Johny Johnson."
+sentence_6 = "My name is Johny Johnson my pronouns are xe xye."
 
 
-extract = sentence_4
+
+extract = sentence_6
 
 print(extract)
 print(extract_name_pronouns(extract))

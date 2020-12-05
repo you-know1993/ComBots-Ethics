@@ -274,7 +274,7 @@ def store_triple(triple_object):
     """
 
 def main_inprogress():
-    visual_gender = 0
+    visual_gender = 1
     image_path='merel_test.jpg'
 
     # Set global variables
@@ -286,13 +286,14 @@ def main_inprogress():
 
     # If pronouns are not given
     if pronouns == None:
+
         #visual_gender = get_visual_gender(image_path)
         name_gender = get_name_gender(name)
 
         # Run through script to extract pronouns either by asking or assuming
         pronouns = pronoun_retrieving_script(name_gender, visual_gender)
 
-    #print(create_triple(name, pronouns))
+    print(create_triple(name, pronouns))
 
 if __name__ == "__main__":
     main_inprogress()

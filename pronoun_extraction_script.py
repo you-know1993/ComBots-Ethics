@@ -2,6 +2,8 @@
 import requests
 import numpy as np
 import cv2
+import nltk
+
 NAMEAPI_KEY="c5daf3adac2a3e85791630c643d55611-user1"
 url = ("http://api.nameapi.org/rest/v5.3/genderizer/persongenderizer?"
     f"apiKey={NAMEAPI_KEY}"
@@ -110,25 +112,67 @@ def get_name_gender(name_string):
         print("Network error:", e)
 
 
+def extract_name_pronouns(text):
+    """
+    Reads text and retuns name (or None) and tuple of given pronouns (or empty tuple).
+    Tokenises text, then adds pos tags. All NNPs in sentence are stored as the name.
+    All PRPs are stored as pronouns.
+
+    :param text: The sentence as a string
+    :return: tuple(name, pronoun) with name in a string and pronouns in a tuple
+    """
+    name_list = []
+    pronoun_list = []
+    # List of first/second person pronouns to exclude
+    exclude_pronoun_list = ["i", "we", "you", "it", "me", "us"]
+
+    # Tokenise
+    text_tok = nltk.word_tokenize(text)
+
+    # Part of speech tag
+    pos_tagged = nltk.pos_tag(text_tok)
+    #print(pos_tagged)
+
+    # Loop through pos tagged list
+    for token, pos_tag in pos_tagged:
+        if pos_tag == "NNP":
+            name_list.append(token)
+        if pos_tag == "PRP":
+            if not token.lower() in exclude_pronoun_list:
+                pronoun_list.append(token)
+
+    name = " ".join(name_list)
+    pronouns = tuple(pronoun_list)
+
+    return name, pronouns
+
 def greeting_script():
     """
     Script where Leolani introduces herself and asks who are you
 
-    :return: tuple(name, pronouns) or tuple(name, None)
+    :return: tuple(name, pronouns) with name in string and pronouns as tuple
+        or tuple(name, None)
     """
     name = None
     pronouns = None
 
     print("Hi! I'm Leolani, my pronouns are she/her. I love getting to know new people.")
-    print("While I am learning, please fill in your name and pronouns in the following format: 'name, pro/nouns' or just 'name'")
     answer = input("Who are you? \n")
 
-    if "," in answer:
-        name, pronouns = answer.split(", ")
+    detected_name, detected_pronouns = extract_name_pronouns(answer)
+
+    # Determine name
+    if detected_name == None:
+        name = input("I am sorry, I didn't understand. What is your name?")
+    else:
+        name = detected_name
+
+    # Determine pronouns
+    if detected_pronouns != None:
+        pronouns = detected_pronouns
         print(f"Nice to meet you, {name}. Your pronouns are {pronouns}")
     else:
-        name = answer
-        # pronouns remain unchanged (None)
+        # if no pronouns are given (None)
         print(f"Nice to meet you, {name}.")
         # TODO: remove later
         print("You have not specified your pronouns.")

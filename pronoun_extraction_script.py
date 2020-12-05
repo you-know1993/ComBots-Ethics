@@ -1,14 +1,14 @@
 # imports
 import requests
 import numpy as np
-import cv2
+#import cv2
 import nltk
 
 NAMEAPI_KEY="c5daf3adac2a3e85791630c643d55611-user1"
 url = ("http://api.nameapi.org/rest/v5.3/genderizer/persongenderizer?"
     f"apiKey={NAMEAPI_KEY}"
 )
-
+"""
 FACE_THRESHOLD_MALE=0.35
 FACE_THRESHOLD_FEMALE=0.65
 from cltl_face_all.face_alignment import FaceDetection
@@ -18,7 +18,7 @@ from cltl_face_all.agegender import AgeGender
 ag = AgeGender(device='cpu')
 af = ArcFace(device='cpu')
 fd = FaceDetection(device='cpu', face_detector='blazeface')
-
+"""
 def get_visual_gender(image_filepath):
     """
     Reads image
@@ -142,7 +142,12 @@ def extract_name_pronouns(text):
                 pronoun_list.append(token)
 
     name = " ".join(name_list)
-    pronouns = tuple(pronoun_list)
+    if len(pronoun_list) == 0:
+        pronouns = None
+    elif len(pronoun_list) == 1:
+        pronouns = pronoun_list[0]
+    else:
+        pronouns = "/".join(pronoun_list)
 
     return name, pronouns
 
@@ -176,6 +181,7 @@ def greeting_script():
         print(f"Nice to meet you, {name}.")
         # TODO: remove later
         print("You have not specified your pronouns.")
+        pronouns = None
 
     return name, pronouns
 
@@ -243,7 +249,7 @@ def pronoun_retrieving_script(name_gender, visual_gender):
 
 
 
-def create_triple(name_string, pronouns_string):
+def create_triple(name_string, pronouns_tuple):
     """
     Create triple in Leolani brain format.
     Probably something like: LeolaniWorld:Quirine, property:has_pronouns, value:she/her.
@@ -254,6 +260,8 @@ def create_triple(name_string, pronouns_string):
     :return: triple in Leolani brain format
     """
     #Is this usefull?
+    pronouns_string = "/".join(list(pronouns_tuple))
+
     return (f'LeolaniWolrd:{name_string.lower()}', 'has_pronouns', f'pronouns:{pronouns_string.lower()}')
 
 
@@ -266,7 +274,7 @@ def store_triple(triple_object):
     """
 
 def main_inprogress():
-    #temp_visual_gender = 1
+    visual_gender = 0
     image_path='merel_test.jpg'
 
     # Set global variables
@@ -275,15 +283,16 @@ def main_inprogress():
 
     # Leolani introduces herself
     name, pronouns = greeting_script()
+
     # If pronouns are not given
     if pronouns == None:
-        visual_gender = get_visual_gender(image_path)
+        #visual_gender = get_visual_gender(image_path)
         name_gender = get_name_gender(name)
 
         # Run through script to extract pronouns either by asking or assuming
         pronouns = pronoun_retrieving_script(name_gender, visual_gender)
 
-    print(create_triple(name, pronouns))
+    #print(create_triple(name, pronouns))
 
 if __name__ == "__main__":
     main_inprogress()

@@ -47,7 +47,7 @@ def extend_dataframe(df):
     return df
 
 
-def main(test_csv='Combots dataset - sample_data.csv'):
+def main(test_csv='data/Combots dataset - sample_data.csv'):
     data=pd.read_csv(test_csv)
     data=extend_dataframe(data)
     print(data.head())

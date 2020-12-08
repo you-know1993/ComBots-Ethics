@@ -1,16 +1,14 @@
 # imports
 import requests
 import numpy as np
-#import cv2
+import cv2
 import nltk
 
 NAMEAPI_KEY="c5daf3adac2a3e85791630c643d55611-user1"
 url = ("http://api.nameapi.org/rest/v5.3/genderizer/persongenderizer?"
     f"apiKey={NAMEAPI_KEY}"
 )
-"""
-FACE_THRESHOLD_MALE=0.35
-FACE_THRESHOLD_FEMALE=0.65
+
 from cltl_face_all.face_alignment import FaceDetection
 from cltl_face_all.arcface import ArcFace
 from cltl_face_all.agegender import AgeGender
@@ -18,8 +16,8 @@ from cltl_face_all.agegender import AgeGender
 ag = AgeGender(device='cpu')
 af = ArcFace(device='cpu')
 fd = FaceDetection(device='cpu', face_detector='blazeface')
-"""
-def get_visual_gender(image_filepath):
+
+def get_visual_gender(image_filepath, male_threshold=0.35, female_threshold=0.65):
     """
     Reads image
     Load Tae's gender-age code. https://github.com/leolani/cltl-face-all
@@ -44,23 +42,21 @@ def get_visual_gender(image_filepath):
     landmark = landmarks[0]
     face = faces[0]
     if len(bbox) > 0:
-        #print(f"number of faces in this frame: {len(bbox)}")
-
         # ag and af return a np.ndarray
+        #We assume the first recognised face is the correct face
         _, predicted_gender = ag.predict(face)
-        print(predicted_gender)
-        if predicted_gender < FACE_THRESHOLD_MALE:
+        if predicted_gender[0] < male_threshold:
             return 0 #for male
-        elif predicted_gender > FACE_THRESHOLD_FEMALE:
+        elif predicted_gender[0] > female_threshold:
             return 1 #for female
         else:
-            return 2 #fer unknown
+            return 2 #for other
 
 
 
 def get_name_gender(name_string):
     """
-    Use (harvard) api.
+    Use NameAPI.
     Translate result to 0,1,2 for gender coding.
     :param name_string: The name as a string
     :return: 0,1,2 for male, female, unknown
@@ -95,7 +91,6 @@ def get_name_gender(name_string):
         resp.raise_for_status()
         # Decode JSON response into a Python dict:
         resp_dict = resp.json()
-        print(resp_dict)
         name_gender = resp_dict['gender']
         if name_gender == 'MALE':
             name_gender_int = 0

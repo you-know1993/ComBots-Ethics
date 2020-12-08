@@ -1,7 +1,7 @@
 # imports
 import requests
 import numpy as np
-import cv2
+#import cv2
 import nltk
 
 NAMEAPI_KEY="c5daf3adac2a3e85791630c643d55611-user1"
@@ -126,7 +126,7 @@ def extract_name_pronouns(text):
 
     # Part of speech tag
     pos_tagged = nltk.pos_tag(text_tok)
-    #print(pos_tagged)
+    print(pos_tagged)
 
     # Loop through pos tagged list
     for token, pos_tag in pos_tagged:
@@ -136,7 +136,15 @@ def extract_name_pronouns(text):
             if not token.lower() in exclude_pronoun_list:
                 pronoun_list.append(token)
 
-    name = " ".join(name_list)
+    # Reformat name
+    if len(name_list) == 0:
+        name = None
+    elif len(name_list) == 1:
+        name = name_list[0]
+    else:
+        name = " ".join(name_list)
+
+    # Reformat pronouns
     if len(pronoun_list) == 0:
         pronouns = None
     elif len(pronoun_list) == 1:
@@ -180,23 +188,24 @@ def greeting_script():
 
     return name, pronouns
 
-def suggest_pronouns_script(suggesting_pronouns):
-    """
-    Verifying whether suggested pronouns are okay.
-    :param suggesting_pronouns: 0,1,2 relating to gender of visual input
-    :return: pronouns
-    """
-    pronouns = None
-
-    pronoun_ok = input(f"Would you like me to refer to you as {suggesting_pronouns}? y/n \n")
-
-    if pronoun_ok == "y":
-        pronouns = suggesting_pronouns
-    else:
-        print("My apologies, I am still learning about the human world.")
-        pronouns = input("Which pronouns would you like me to use to refer to you? \n")
-
-    return pronouns
+# Design change. Not suggesting pronouns due to questionnaire results.
+# def suggest_pronouns_script(suggesting_pronouns):
+#     """
+#     Verifying whether suggested pronouns are okay.
+#     :param suggesting_pronouns: 0,1,2 relating to gender of visual input
+#     :return: pronouns
+#     """
+#     pronouns = None
+#
+#     pronoun_ok = input(f"Would you like me to refer to you as {suggesting_pronouns}? y/n \n")
+#
+#     if pronoun_ok == "y":
+#         pronouns = suggesting_pronouns
+#     else:
+#         print("My apologies, I am still learning about the human world.")
+#         pronouns = input("Which pronouns would you like me to use to refer to you? \n")
+#
+#     return pronouns
 
 def pronoun_retrieving_script(name_gender, visual_gender):
     """
@@ -232,19 +241,13 @@ def pronoun_retrieving_script(name_gender, visual_gender):
         print("There is a mismatch between the gender of your name and visual.")
 
         print("I have been taught that there are different ways that humans like to be referred as.")
-        if name_gender == 0:
-            suggested_pronouns = "he/him"
-            pronouns = suggest_pronouns_script(suggested_pronouns)
-
-        elif name_gender == 1:
-            suggested_pronouns = "she/her"
-            pronouns = suggest_pronouns_script(suggested_pronouns)
+        pronouns = input("Which pronouns would you like me to use to refer to you?")
 
     return pronouns
 
 
 
-def create_triple(name_string, pronouns_tuple):
+def create_triple(name_string, pronouns_string):
     """
     Create triple in Leolani brain format.
     Probably something like: LeolaniWorld:Quirine, property:has_pronouns, value:she/her.
@@ -255,7 +258,8 @@ def create_triple(name_string, pronouns_tuple):
     :return: triple in Leolani brain format
     """
     #Is this usefull?
-    pronouns_string = "/".join(list(pronouns_tuple))
+
+    #pronouns_string = "/".join(list(pronouns_tuple))
 
     return (f'LeolaniWolrd:{name_string.lower()}', 'has_pronouns', f'pronouns:{pronouns_string.lower()}')
 
@@ -268,7 +272,7 @@ def store_triple(triple_object):
     :return: nothing, saved triple in correct location
     """
 
-def main_inprogress():
+def main():
     visual_gender = 0
     image_path='merel_test.jpg'
 
@@ -282,7 +286,7 @@ def main_inprogress():
     # If pronouns are not given
     if pronouns == None:
 
-        #visual_gender = get_visual_gender(image_path)
+        visual_gender = get_visual_gender(image_path)
         name_gender = get_name_gender(name)
 
         # Run through script to extract pronouns either by asking or assuming
@@ -291,4 +295,4 @@ def main_inprogress():
     print(create_triple(name, pronouns))
 
 if __name__ == "__main__":
-    main_inprogress()
+    main()

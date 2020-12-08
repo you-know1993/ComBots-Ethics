@@ -2,6 +2,9 @@ import pronoun_extraction_script
 import pandas as pd
 import numpy as np
 
+# Problem installing pytorch
+# https://stackoverflow.com/questions/65191751/error-torch-has-an-invalid-wheel-dist-info-directory-not-found
+
 def system_results(gold, predicted, baseline):
     '''
     Generates the interpretation of the predicted action of the system.

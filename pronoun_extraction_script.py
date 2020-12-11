@@ -1,9 +1,9 @@
 # imports
 import requests
 import numpy as np
-#import cv2
+import cv2
 import nltk
-
+from datetime import datetime
 NAMEAPI_KEY="c5daf3adac2a3e85791630c643d55611-user1"
 url = ("http://api.nameapi.org/rest/v5.3/genderizer/persongenderizer?"
     f"apiKey={NAMEAPI_KEY}"
@@ -224,11 +224,13 @@ def pronoun_retrieving_script(name_gender, visual_gender):
         print("I cannot detect gender based on your name.")
 
         pronouns = input("Which pronouns would you like me to use to refer to you? ")
+        self_defined=True
 
     # If gender of name and visual match, assume pronouns
     elif name_gender == visual_gender:
         # TODO: remove print statement
         print("The gender of your name and visual match. I will assume your pronouns.")
+        self_defined=False
 
         # TODO: check if number coding is correct
         if name_gender == 0:
@@ -242,12 +244,13 @@ def pronoun_retrieving_script(name_gender, visual_gender):
 
         print("I have been taught that there are different ways that humans like to be referred as.")
         pronouns = input("Which pronouns would you like me to use to refer to you?")
+        self_defined=True
 
-    return pronouns
+    return pronouns, self_defined
 
 
 
-def create_triple(name_string, pronouns_string):
+def create_triple(name_string, pronouns_string, self_defined):
     """
     Create triple in Leolani brain format.
     Probably something like: LeolaniWorld:Quirine, property:has_pronouns, value:she/her.
@@ -260,9 +263,29 @@ def create_triple(name_string, pronouns_string):
     #Is this usefull?
 
     #pronouns_string = "/".join(list(pronouns_tuple))
+    if self_defined:
+        author=name_string.lower()
+    else:
+        author='leolani'
 
-    return (f'LeolaniWolrd:{name_string.lower()}', 'has_pronouns', f'pronouns:{pronouns_string.lower()}')
+    statement={
+            "utterance": f"{name_string.lower()} has pronouns {pronouns_string.lower()}",
+            "subject": {"label": {name_string.lower()}, "type": "person"},
+            "predicate": {"type": "has_pronouns"},
+            "object": {"label": f"{pronouns_string.lower()}", "type": "pronouns"},
+            "perspective": {"certainty": 1, "polarity": 1, "sentiment": 0},
+            "author": f"{author}",
+            "chat": 1,
+            "turn": 1,
+            "position": "0-25",
+            "date": datetime.date(datetime.now())
+        }
 
+
+
+
+    #return (f'LeolaniWorld:{name_string.lower()}', 'has_pronouns', f'pronouns:{pronouns_string.lower()}')
+    return statement
 
 
 def store_triple(triple_object):
@@ -274,7 +297,7 @@ def store_triple(triple_object):
 
 def main():
     visual_gender = 0
-    image_path='merel_test.jpg'
+    image_path='merel.jpg'
 
     # Set global variables
     name = None
@@ -282,17 +305,17 @@ def main():
 
     # Leolani introduces herself
     name, pronouns = greeting_script()
+    self_defined=True
 
     # If pronouns are not given
     if pronouns == None:
-
         visual_gender = get_visual_gender(image_path)
         name_gender = get_name_gender(name)
 
         # Run through script to extract pronouns either by asking or assuming
-        pronouns = pronoun_retrieving_script(name_gender, visual_gender)
+        pronouns, self_defined = pronoun_retrieving_script(name_gender, visual_gender)
 
-    print(create_triple(name, pronouns))
+    print(create_triple(name, pronouns, self_defined))
 
 if __name__ == "__main__":
     main()

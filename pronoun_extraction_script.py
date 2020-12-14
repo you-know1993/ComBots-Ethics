@@ -296,7 +296,6 @@ def store_triple(triple_object):
     """
 
 def main():
-    visual_gender = 0
     image_path='merel.jpg'
 
     # Set global variables

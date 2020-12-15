@@ -1,5 +1,5 @@
 # ComBots-Ethics
-Small Github for the stand-alone pronoun generation project
+Small Github for the stand-alone pronoun extraction project, based on a simple greeting script
 
 ## Files:
 File  | Description
@@ -11,6 +11,19 @@ run_tests.py | Script to compare the system with a visual baseline system based 
 toy_example_pronoun_detection.py | The first toy example of the NameAPI workings
 text_to_pronouns.py | Script to extract the pronouns out of a greeting sentence, including some examples
 
-## API keys:
+## API key:
+The project makes use of the NameAPI.org API. A key can be obtained here: https://www.nameapi.org/en/register/
 
 ## Data:
+The data folder contains a sample csv file that shows our data stucture and a subfolder with pictures mentioned in that csv file. The full dataset will not be share due to it containing sensitive information, but it was collected from several tv-shows ("Hij is een zij", "Are you the one?", "Genderquake"), from social media and via VU pride via a questionnaire, and extended with fake data in the form of pictures with a gender neutral name.
+
+## Dependencies
+### cltl-face-all
+The system works with the cltl-face-all system, which can be found here: https://github.com/leolani/cltl-face-all/tree/master/cltl_face_all
+### Python libraries
+* Pandas
+* Numpy
+* Request
+* Nltk
+* Datetime
+* OpenCV

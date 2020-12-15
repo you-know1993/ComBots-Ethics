@@ -27,3 +27,5 @@ The system works with the cltl-face-all system, which can be found here: https:/
 * Nltk
 * Datetime
 * OpenCV
+* Tensorflow
+* Pytorch

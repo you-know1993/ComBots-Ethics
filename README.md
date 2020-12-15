@@ -15,7 +15,7 @@ text_to_pronouns.py | Script to extract the pronouns out of a greeting sentence,
 The project makes use of the NameAPI.org API. A key can be obtained here: https://www.nameapi.org/en/register/
 
 ## Data:
-The data folder contains a sample csv file that shows our data stucture and a subfolder with pictures mentioned in that csv file. The full dataset will not be share due to it containing sensitive information, but it was collected from several tv-shows ("Hij is een zij", "Are you the one?", "Genderquake"), from social media and via VU pride via a questionnaire, and extended with fake data in the form of pictures with a gender neutral name.
+The data folder contains a sample csv file that shows our data stucture and a subfolder with pictures mentioned in that csv file. The full dataset will not be share due to it containing sensitive information, but it was collected from several tv-shows ("Hij is een zij", "Are you the one?", "Genderquake"), from social media, via VU pride via a questionnaire, and extended with fake data in the form of pictures with a gender neutral name.
 
 ## Dependencies
 ### cltl-face-all

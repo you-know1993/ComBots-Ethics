@@ -4,7 +4,10 @@ import numpy as np
 import cv2
 import nltk
 from datetime import datetime
-NAMEAPI_KEY="c5daf3adac2a3e85791630c643d55611-user1"
+#
+TODO GIVE NAMEAPI KEY HERE
+NAMEAPI_KEY=
+
 url = ("http://api.nameapi.org/rest/v5.3/genderizer/persongenderizer?"
     f"apiKey={NAMEAPI_KEY}"
 )
@@ -163,6 +166,7 @@ def greeting_script():
     """
     name = None
     pronouns = None
+    self_defined= None
 
     print("Hi! I'm Leolani, my pronouns are she/her. I love getting to know new people.")
     answer = input("Who are you? \n")
@@ -179,6 +183,7 @@ def greeting_script():
     if detected_pronouns != None:
         pronouns = detected_pronouns
         print(f"Nice to meet you, {name}. Your pronouns are {pronouns}")
+        self_defined=True
     else:
         # if no pronouns are given (None)
         print(f"Nice to meet you, {name}.")
@@ -186,7 +191,7 @@ def greeting_script():
         print("You have not specified your pronouns.")
         pronouns = None
 
-    return name, pronouns
+    return name, pronouns, self_defined
 
 # Design change. Not suggesting pronouns due to questionnaire results.
 # def suggest_pronouns_script(suggesting_pronouns):
@@ -253,9 +258,6 @@ def pronoun_retrieving_script(name_gender, visual_gender):
 def create_triple(name_string, pronouns_string, self_defined):
     """
     Create triple in Leolani brain format.
-    Probably something like: LeolaniWorld:Quirine, property:has_pronouns, value:she/her.
-    # How do we store the pronouns? Options: tuple of strings ("she", "her"), string "she/her", int 0, 1 or 2 (but then its a predefined finite set.
-
     :param name_string: String of name to store in Leolani brain (is this needed to form the triple
     :param pronouns_string: string of pronouns
     :return: triple in Leolani brain format
@@ -280,31 +282,17 @@ def create_triple(name_string, pronouns_string, self_defined):
             "position": "0-25",
             "date": datetime.date(datetime.now())
         }
-
-
-
-
-    #return (f'LeolaniWorld:{name_string.lower()}', 'has_pronouns', f'pronouns:{pronouns_string.lower()}')
     return statement
 
-
-def store_triple(triple_object):
-    """
-    Store triple object in folder and file
-    :param triple_object:
-    :return: nothing, saved triple in correct location
-    """
-
 def main():
-    image_path='merel.jpg'
+    image_path='data/sample_data/Justin.jpg'
 
     # Set global variables
     name = None
     pronouns = None
 
     # Leolani introduces herself
-    name, pronouns = greeting_script()
-    self_defined=True
+    name, pronouns, self_defined= greeting_script()
 
     # If pronouns are not given
     if pronouns == None:

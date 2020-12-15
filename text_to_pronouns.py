@@ -36,7 +36,7 @@ sentence_2 = "My name is Soren. I prefer the pronouns he him."
 sentence_3 = "My name is Maria and my pronouns are I, they, them. How are you?"
 sentence_4 = "I'm Jack, I don't mind what you refer to me as, either he, him or they, them."
 sentence_5 = "No pronouns here"
-sentence_6 = "My name is Johny Johnson my pronouns are xe xye."
+sentence_6 = "My name is Johny Johnson my pronouns are zie zim."
 
 
 

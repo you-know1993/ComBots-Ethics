@@ -1,5 +1,7 @@
 # ComBots-Ethics
 Small Github for the stand-alone pronoun extraction project, based on a simple greeting script
+In this script the system, "Leolani" introduces herself and states her pronouns. 
+The person interacting is then asked to introduce themselves and by the end of the script their pronouns are stored.
 
 ## Files:
 File  | Description

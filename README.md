@@ -31,3 +31,8 @@ The system works with the cltl-face-all system, which can be found here: https:/
 * OpenCV
 * Tensorflow
 * Pytorch
+
+## Authors
+Merel de Groot (m.n.m.de.groot@student.vu.nl)
+
+Quirine Smit (q.t.s.smit@student.vu.nl)
